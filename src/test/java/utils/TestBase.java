@@ -2,6 +2,7 @@ package utils;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -28,7 +29,11 @@ public class TestBase {
         String url = properties.getProperty("URL");
        if(DriverManager.getDriver()==null) {
            if (browserName.equalsIgnoreCase("chrome")) {
-               driver = new ChromeDriver();
+               ChromeOptions options = new ChromeOptions();
+               options.addArguments("--headless=new");
+               options.addArguments("--no-sandbox");
+               options.addArguments("--disable-dev-shm-usage");
+               driver = new ChromeDriver(options);
                driver.manage().window().maximize();
                driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
                driver.get(url);

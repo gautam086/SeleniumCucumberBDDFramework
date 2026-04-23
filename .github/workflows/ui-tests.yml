@@ -1,0 +1,62 @@
+name: UI Automation Pipeline
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+
+  workflow_dispatch:
+    inputs:
+      env:
+        description: 'Environment (qa/dev/prod)'
+        required: false
+        default: 'qa'
+
+      browser:
+        description: 'Browser (chrome/firefox)'
+        required: false
+        default: 'chrome'
+
+      tags:
+        description: 'Cucumber Tags (e.g. @RunFirst)'
+        required: false
+        default: ''
+
+      feature:
+        description: 'Feature file path (optional)'
+        required: false
+        default: ''
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+
+      - name: Run Tests
+        run: |
+          mvn clean test \
+            -Denv=${{ github.event.inputs.env }} \
+            -Dbrowser=${{ github.event.inputs.browser }} \
+            -Dcucumber.filter.tags="${{ github.event.inputs.tags }}" \
+            -Dcucumber.features="${{ github.event.inputs.feature }}"
+
+      - name: Upload Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: extent-report
+          path: test-output/ExtentReport/
