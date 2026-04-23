@@ -22,7 +22,7 @@ public class TestBase {
         properties.load(fi);
         String browserName=System.getProperty("browser");
 
-        if(browserName==null){
+        if(browserName==null || browserName.isEmpty()){
             browserName = properties.getProperty("browser");
         }
 
