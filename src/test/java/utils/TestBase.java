@@ -14,7 +14,7 @@ public class TestBase {
     Properties properties;
     public WebDriver initDriver() throws IOException {
         String env = System.getProperty("env");
-        if(env==null){
+        if(env == null || env.isEmpty()){
             env = "qa";
         }
         FileInputStream fi = new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/Config-"+env+".properties");

@@ -49,7 +49,7 @@ jobs:
       - name: Run Tests
         run: |
           mvn clean test \
-            -Denv=${{ github.event.inputs.env }} \
+            -Denv=${{ github.event.inputs.env || 'qa'}} \
             -Dbrowser=${{ github.event.inputs.browser }} \
             -Dcucumber.filter.tags="${{ github.event.inputs.tags }}" \
             -Dcucumber.features="${{ github.event.inputs.feature }}"
