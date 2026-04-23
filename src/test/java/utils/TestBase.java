@@ -40,6 +40,9 @@ public class TestBase {
                DriverManager.setDriver(driver);
            }
        }
+        System.out.println("Browser from CLI: " + System.getProperty("browser"));
+        System.out.println("Browser from properties: " + properties.getProperty("browser"));
+        System.out.println("Final browser: " + browserName);
       return DriverManager.getDriver();
     }
 }
